@@ -940,7 +940,7 @@ function Loading {
 
 
     Write-Host " "
-    Write-host "             .__." -ForegroundColor Green
+    Write-host "                   .__." -ForegroundColor Green
     Write-host "                   (oo)____" -ForegroundColor Green
     Write-host "                   (__)    )\" -ForegroundColor Green
     Write-host "                      ll--ll '" -ForegroundColor Green
@@ -1131,7 +1131,7 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
 
         Write-Host " ================================================================"
         Write-Host " "
-        Write-host "               .__." -ForegroundColor Green
+        Write-host "                   .__." -ForegroundColor Green
         Write-host "                   (oo)____" -ForegroundColor Green
         Write-host "                   (__)    )\" -ForegroundColor Green
         Write-host "                      ll--ll '" -ForegroundColor Green
@@ -1161,7 +1161,7 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         Write-Host " SIP Location         :  " -NoNewline
         Write-Host $GetSIPLoc -ForegroundColor $Siploccolor
         Write-Host " Mail Address         : "$GetMail
-        Write-Host " Mail Auto-Forward    : " -NoNewline
+        Write-Host " Mail Auto-Forward    :  " -NoNewline
         Write-Host $isDotForwardVal -ForegroundColor $dotForwardColor
         Write-Host " Mailbox Database     : "$GetHomeMDBName[1]
         Write-Host " Mailbox Creation     : "$GetMailboxCreation
@@ -1631,7 +1631,7 @@ Function SearchGroup ($GroupQuery) {
     Clear-Host
     Write-host " "
     Write-Host " ============================================================="
-    Write-host "             .__." -ForegroundColor Green
+    Write-host "                   .__." -ForegroundColor Green
     Write-host "                   (oo)____" -ForegroundColor Green
     Write-host "                   (__)    )\" -ForegroundColor Green
     Write-host "                      ll--ll '" -ForegroundColor Green
@@ -1857,7 +1857,7 @@ Function SearchComp ($CompQuery) {
     Clear-Host
     Write-host " "
     Write-Host " ============================================================="
-    Write-host "             .__." -ForegroundColor Green
+    Write-host "                   .__." -ForegroundColor Green
     Write-host "                   (oo)____" -ForegroundColor Green
     Write-host "                   (__)    )\" -ForegroundColor Green
     Write-host "                      ll--ll '" -ForegroundColor Green
