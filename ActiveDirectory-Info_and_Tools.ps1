@@ -1120,6 +1120,15 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         $Mbxtypecolor = "Red"
         }
 
+        $DotForward = $objUser.properties.item("altRecipient")
+        if ($DotForward -eq $null -or $DotForward -eq "< Null >"){
+        $isDotForwardVal = " "
+        $dotForwardColor = "Green"
+        } Else {
+        $isDotForwardVal = "Yes"
+        $dotForwardColor = "Yellow"
+        }
+
         Write-Host " ================================================================"
         Write-Host " "
         Write-host "               .__." -ForegroundColor Green
@@ -1152,6 +1161,8 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         Write-Host " SIP Location         :  " -NoNewline
         Write-Host $GetSIPLoc -ForegroundColor $Siploccolor
         Write-Host " Mail Address         : "$GetMail
+        Write-Host " Mail Auto-Forward    : " -NoNewline
+        Write-Host $isDotForwardVal -ForegroundColor $dotForwardColor
         Write-Host " Mailbox Database     : "$GetHomeMDBName[1]
         Write-Host " Mailbox Creation     : "$GetMailboxCreation
         Write-Host " Mailbox Type         :  " -NoNewline
@@ -1383,6 +1394,8 @@ function ExportMembers ($Query) {
     Write-Host " [ Exporting ] " -ForegroundColor DarkGreen -NoNewline
     Write-Host " Please wait !!"
     foreach($member in $mem){
+        $mail = $null
+        $employeeid = $null
         $LDAPInfo = "LDAP://" + $member
         $GQuery = [ADSI]"$LDAPInfo"
         $sam = $GQuery.get("samaccountname")
@@ -1447,6 +1460,8 @@ function ListMembers ($Query) {
     Write-host " "
     $i = 0
     foreach($member in $mem){
+        $mail = $null
+        $employeeid = $null
         $LDAPInfo = "LDAP://" + $member
         $GQuery = [ADSI]"$LDAPInfo"
         $sam = $GQuery.get("samaccountname")
