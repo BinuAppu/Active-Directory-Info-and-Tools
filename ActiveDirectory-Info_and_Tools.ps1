@@ -1972,6 +1972,63 @@ Function NewGrpSearch {
 
 }
 
+function xxd {
+    Clear-Host
+    loadlogo
+    Write-host " "
+    Write-Host " [ PERFORMING XXD QUERY ] " -ForegroundColor Black -BackgroundColor Cyan
+    Write-host " "
+    $FilePath = Read-Host " Enter the file path [FQDN] to view the HEX values : "
+
+
+    $bytes = [System.IO.File]::ReadAllBytes($FilePath)
+    $lineSize = 16
+    
+# Display the header
+    Write-Host ("Offset(Hex)  " + ("Byte Values".PadRight(47)) + " |ASCII|")
+
+    # Iterate through bytes
+    for ($i = 0; $i -lt $bytes.Length; $i += $lineSize) {
+        $chunk = $bytes[$i..([Math]::Min($i + $lineSize - 1, $bytes.Length - 1))]
+        $offset = $i.ToString("X8")
+        $hex = ($chunk | ForEach-Object { $_.ToString("X2") }) -join " "
+        $ascii = ($chunk | ForEach-Object {
+            if ($_ -ge 32 -and $_ -le 126) {
+                [char]$_
+            } else {
+                "."
+            }
+        }) -join ""
+
+        Write-Host ("$offset  $hex".PadRight(57) + " |$ascii|")
+    }
+
+
+    $option = $null
+    Write-Host " "
+    Write-Host " ================================================================"
+    Write-Host " "
+    Write-Host " N " -ForegroundColor Black -BackgroundColor White -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " New Query " -ForegroundColor Black -BackgroundColor White -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " X " -ForegroundColor White -BackgroundColor DarkMagenta -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " Main Menu " -ForegroundColor White -BackgroundColor DarkMagenta
+    $option = Read-Host " > "
+
+    if ($option -eq "n" -or $option -eq "N") {
+        xxd
+    }
+    elseif ($option -eq "x" -or $option -eq "X") {
+        Loading
+    }
+    else {
+        xxd
+    }
+
+}
+
 function MainMenu {
     Clear-Host
     $currentDomain = $null
@@ -2011,6 +2068,8 @@ function MainMenu {
     Write-Host "Encrypt String to Base64 OR Decrypt encrypted Base64 to String" -ForegroundColor White
     Write-Host "      11. " -ForegroundColor Green -NoNewline
     Write-Host "Get file HASH/s" -ForegroundColor White
+    Write-Host "      12. " -ForegroundColor Green -NoNewline
+    Write-Host "Get file XXD" -ForegroundColor White
     Write-Host " "
     $Option = Read-Host(" Prompt > ")
     If($Option -eq 1){
@@ -2035,6 +2094,8 @@ function MainMenu {
         EncryptDecryptString
     } elseif($option -eq 11){
         GetHASHofFile
+    } elseif($option -eq 12){
+        xxd
     } else {
         Write-host "[Error] " -ForegroundColor Red -NoNewline
         Write-Host " You have entered invalid option !! Exiting..."
