@@ -66,7 +66,7 @@ function GetHASHofFile {
     $ask = Read-Host " Prompt > "
     # include hash type selection
     $hashAsk = Read-Host " Enter the Hash type [MD5, SHA1, SHA256, SHA512] "
-    if($ask -eq 1){
+    if ($ask -eq 1) {
         $file = Read-Host " Enter the file path "
         $hash = Get-FileHash -Path $file -Algorithm $hashAsk
         Write-Host " "
@@ -76,14 +76,16 @@ function GetHASHofFile {
         Write-Host " { " -ForegroundColor Gray
         Write-Host "     " $hash.Hash
         Write-Host " } " -ForegroundColor Gray
-    } elseif ($ask -eq 2) {
+    }
+    elseif ($ask -eq 2) {
         $folder = Read-Host " Enter the folder path "
         $files = Get-ChildItem -Path $folder
-        foreach ($file in $files){
+        foreach ($file in $files) {
             $hash = Get-FileHash -Path $file.FullName -Algorithm $hashAsk
             Write-Host "HASH : "$hash.Hash " File: " $hash.Path 
         }
-    } else {
+    }
+    else {
         Write-Host " "
         Write-Host " [Error] " -ForegroundColor Red -NoNewline
         Write-Host "Wrong option selected. Redirecting to Main menu in 2 seconds !!" -ForegroundColor Yellow
@@ -103,11 +105,13 @@ function GetHASHofFile {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         GetHASHofFile
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         GetHASHofFile
     }
 
@@ -125,7 +129,7 @@ function EncryptDecryptString {
     Write-Host " "
     $ask = Read-Host " Prompt > "
 
-    if($ask -eq 1){
+    if ($ask -eq 1) {
        
         # Define your message to encrypt
         $plaintext = Read-Host " Enter the String to Encrypt "
@@ -135,7 +139,7 @@ function EncryptDecryptString {
 
         # Define the password (make sure to store it securely)
         # $password = Read-Host " Enter password for Encryption " -AsSecureString
-        $MySecurePassword=read-host -assecurestring " Enter password "
+        $MySecurePassword = read-host -assecurestring " Enter password "
         $pPassPointer = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($MySecurePassword)
         $password = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($pPassPointer)
         # Imported: free memory
@@ -169,7 +173,8 @@ function EncryptDecryptString {
         Write-Host " Base64 Encrypted Message : " -NoNewline -ForegroundColor Yellow
         Write-Host $base64Encrypted -ForegroundColor Green
 
-    } elseif ($ask -eq 2) {
+    }
+    elseif ($ask -eq 2) {
         # The base64-encoded encrypted message
         $base64EncryptedMessage = Read-Host " Enter the encrypted Base64 data for Decryption "
 
@@ -178,7 +183,7 @@ function EncryptDecryptString {
 
         # Define the password (must match the one used for encryption)
         # $password = Read-Host " Enter password for Encryption " -AsSecureString
-        $MySecurePassword=read-host -assecurestring " Enter password "
+        $MySecurePassword = read-host -assecurestring " Enter password "
         $pPassPointer = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($MySecurePassword)
         $password = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($pPassPointer)
         # Imported: free memory
@@ -208,14 +213,16 @@ function EncryptDecryptString {
         # Convert the decrypted bytes to text
         $decryptedText = ""
         $decryptedText = [System.Text.Encoding]::UTF8.GetString($buffer, 0, $bytesRead)
-        if($decryptedText -eq ""){
+        if ($decryptedText -eq "") {
             Write-Host "[ ERROR Decrypting ]" -ForegroundColor Red -BackgroundColor Yellow -NoNewline
             Write-Host " It seems your password didnt work for decryption :-( " -ForegroundColor Red
-        } else {
+        }
+        else {
             Write-Host " Decrypted Message : " -ForegroundColor Yellow -NoNewline
             Write-Host $decryptedText -ForegroundColor Green
         }
-    } else {
+    }
+    else {
         Write-Host " "
         Write-Host " [Error] " -ForegroundColor Red -NoNewline
         Write-Host "Wrong option selected. Redirecting to Main menu in 2 seconds !!" -ForegroundColor Yellow
@@ -235,11 +242,13 @@ function EncryptDecryptString {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         EncryptDecryptString
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         EncryptDecryptString
     }
 
@@ -258,7 +267,7 @@ function converttoandfrombase64 {
     Write-Host " "
     $ask = Read-Host " Prompt > "
 
-    if($ask -eq 1){
+    if ($ask -eq 1) {
         Write-Host " Enter a String below to convert into Base64" -ForegroundColor Green
         $encode = Read-Host " Input String "
         $plaintexttoBytes = [System.Text.Encoding]::UTF8.GetBytes($encode)
@@ -267,7 +276,8 @@ function converttoandfrombase64 {
         Write-Host " { " -ForegroundColor Gray
         Write-Host "            " $base64
         Write-Host " } " -ForegroundColor Gray
-    } elseif ($ask -eq 2) {
+    }
+    elseif ($ask -eq 2) {
         Write-Host " Enter the Base64 data below to convert to String" -ForegroundColor Green
         $decode = Read-Host " Input Base64 "
         $frombase64 = [System.Convert]::FromBase64String($decode)
@@ -276,7 +286,8 @@ function converttoandfrombase64 {
         Write-Host " { " -ForegroundColor Gray
         Write-Host "            " $Converttotext
         Write-Host " } " -ForegroundColor Gray
-    } else {
+    }
+    else {
         Write-Host " "
         Write-Host " [Error] " -ForegroundColor Red -NoNewline
         Write-Host "Wrong option selected. Redirecting to Main menu in 2 seconds !!" -ForegroundColor Yellow
@@ -297,11 +308,13 @@ function converttoandfrombase64 {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         converttoandfrombase64
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         converttoandfrombase64
     }
 }
@@ -322,37 +335,39 @@ function sslscan {
     $remoteComputer = Read-Host " Enter the HostName / IP "
     $port = Read-Host " Enter the Port Number "
     Write-host " "
-    $allcipher = "Ssl2","Ssl3","Tls","Tls11","Tls12","Tls13"
+    $allcipher = "Ssl2", "Ssl3", "Tls", "Tls11", "Tls12", "Tls13"
     Write-Host " { SSL / TLS Version Scanner }" -ForegroundColor Green
     Write-Host " ============================= " -ForegroundColor White
-    forEach ($tls in $allcipher){
-    $tcpclient = New-Object System.Net.Sockets.TcpClient
-    $tcpclient.Connect($remoteComputer,$port)
+    forEach ($tls in $allcipher) {
+        $tcpclient = New-Object System.Net.Sockets.TcpClient
+        $tcpclient.Connect($remoteComputer, $port)
    
-    $sslStream = New-Object System.Net.Security.SslStream($tcpclient.GetStream(), $false, {$true})
-    try {
-        $sslStream.AuthenticateAsClient($remoteComputer, $null, [System.Security.Authentication.SslProtocols]::$tls, $false)
-    } catch {
-        #Write-Host " { Error } " -ForegroundColor Red -NoNewline
-        #Write-host "[ $($_.Exception.Message) ]" -ForegroundColor Yellow
+        $sslStream = New-Object System.Net.Security.SslStream($tcpclient.GetStream(), $false, { $true })
+        try {
+            $sslStream.AuthenticateAsClient($remoteComputer, $null, [System.Security.Authentication.SslProtocols]::$tls, $false)
+        }
+        catch {
+            #Write-Host " { Error } " -ForegroundColor Red -NoNewline
+            #Write-host "[ $($_.Exception.Message) ]" -ForegroundColor Yellow
        
-    }
+        }
    
-    $Cert = $sslStream.RemoteCertificate
+        $Cert = $sslStream.RemoteCertificate
    
    
-    if ($cert -ne $null) {
-        Write-Host " [Success] " -ForegroundColor Green -NoNewline
-        Write-Host "$tls "
+        if ($cert -ne $null) {
+            Write-Host " [Success] " -ForegroundColor Green -NoNewline
+            Write-Host "$tls "
 
-    } else {
+        }
+        else {
 
-        Write-Host " [Failed]  " -ForegroundColor Red -NoNewline
-        Write-Host "$tls "
-    }
+            Write-Host " [Failed]  " -ForegroundColor Red -NoNewline
+            Write-Host "$tls "
+        }
    
-    $sslStream.Dispose()
-    $tcpClient.Close()
+        $sslStream.Dispose()
+        $tcpClient.Close()
     }
     Write-host " "
     Write-Host " " -NoNewline
@@ -366,11 +381,13 @@ function sslscan {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         sslscan-clean
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         sslscan-clean
     }
 
@@ -383,7 +400,7 @@ function ssl-clean {
 }
 
 function loadlogo {
-    $col = "Yellow","Gray","White","Yellow","Blue","Green"
+    $col = "Yellow", "Gray", "White", "Yellow", "Blue", "Green"
 
     Write-Host " "
     Write-Host " "                                              
@@ -435,7 +452,7 @@ function Check-SSL {
     $remoteComputer = Read-Host " Enter the HostName / IP "
     $port = Read-Host " Enter the Port Number "
     Write-Host " Which TLS/SSL you would like to try to connect to remote endpoint"
-Write-Host "
+    Write-Host "
     1. None [OS Default]
     2. Ssl2
     3. Ssl3
@@ -443,25 +460,26 @@ Write-Host "
     5. Tls11
     6. Tls12
     7. Tls13"
-$tlsask = Read-host " Prompt > "
-$tls = switch ($tlsask) {
-     1 {'None'}
-     2 {'Ssl2'}
-     3 {'Ssl3'}
-     4 {'Tls'}
-     5 {'Tls11'}
-     6 {'Tls12'}
-     7 {'Tls13'}
-    Default {'None'}
-}
+    $tlsask = Read-host " Prompt > "
+    $tls = switch ($tlsask) {
+        1 { 'None' }
+        2 { 'Ssl2' }
+        3 { 'Ssl3' }
+        4 { 'Tls' }
+        5 { 'Tls11' }
+        6 { 'Tls12' }
+        7 { 'Tls13' }
+        Default { 'None' }
+    }
 
     $tcpclient = New-Object System.Net.Sockets.TcpClient
-    $tcpclient.Connect($remoteComputer,$port)
+    $tcpclient.Connect($remoteComputer, $port)
    
-    $sslStream = New-Object System.Net.Security.SslStream($tcpclient.GetStream(), $false, {$true})
+    $sslStream = New-Object System.Net.Security.SslStream($tcpclient.GetStream(), $false, { $true })
     try {
         $sslStream.AuthenticateAsClient($remoteComputer, $null, [System.Security.Authentication.SslProtocols]::$tls, $false)
-    } catch {
+    }
+    catch {
         Write-Host " { Error } " -ForegroundColor Red -NoNewline
         Write-host "[ $($_.Exception.Message) ]" -ForegroundColor Yellow
     }
@@ -488,7 +506,8 @@ $tls = switch ($tlsask) {
         Write-Host " Subject         : " -ForegroundColor Yellow -NoNewline
         Write-host "$($cert.Subject)"
         Write-Host "  " -ForegroundColor Green
-    } else {
+    }
+    else {
         Write-Host " { Failed to Connect or Cipher [ $tls ] is not Supported. } " -ForegroundColor Gray
         Write-Host "  " -ForegroundColor Green
     }
@@ -507,11 +526,13 @@ $tls = switch ($tlsask) {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         ssl-clean
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         ssl-clean
     }
 
@@ -519,10 +540,10 @@ $tls = switch ($tlsask) {
 
 function GeneratePwd ($length) {
 
-    $UAlpha = "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"
-    $LAlpha = "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
-    $Num = "1","2","3","4","5","6","7","8","9","0"
-    $Special = "!","$","%","&","(",")","*","+","-","/",":",";","<","=",">","?","@","[","\","]","^","_","{","}","~"
+    $UAlpha = "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+    $LAlpha = "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+    $Num = "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"
+    $Special = "!", "$", "%", "&", "(", ")", "*", "+", "-", "/", ":", ";", "<", "=", ">", "?", "@", "[", "\", "]", "^", "_", "{", "}", "~"
 
     $passlenght = 10..16
     # $ReqPassLenght = Get-Random $passlenght
@@ -531,46 +552,45 @@ function GeneratePwd ($length) {
     # Write-Host "$ReqPassLenght"
 
     $x = 0
-    do
-    {
+    do {
 
 
-    $U = $null
-    if ($x -ne $ReqPassLenght){
-    $Us = $UAlpha | Sort-Object {Get-Random} -Unique        
-    $U = Get-Random $Us -Minimum $passlenght
-    [array]$Pass1 = $Pass1 + $U
-    $x = $x + 1
-    }
-
-
-
-    $L = $null
-    if ($x -ne $ReqPassLenght){
-    $Ls = $LAlpha | Sort-Object {Get-Random} -Unique
-    $L = Get-Random $Ls -Minimum $passlenght
-    [array]$Pass2 = $Pass2 + $L
-    $x = $x + 1
-    }
+        $U = $null
+        if ($x -ne $ReqPassLenght) {
+            $Us = $UAlpha | Sort-Object { Get-Random } -Unique        
+            $U = Get-Random $Us -Minimum $passlenght
+            [array]$Pass1 = $Pass1 + $U
+            $x = $x + 1
+        }
 
 
 
-    $N = $null
-    if ($x -ne $ReqPassLenght){
-    $Ns = $Num | Sort-Object {Get-Random} -Unique
-    $N = Get-Random $Ns -Minimum $passlenght
-    [array]$Pass3 = $Pass3 + $N
-    $x = $x + 1
-    }
+        $L = $null
+        if ($x -ne $ReqPassLenght) {
+            $Ls = $LAlpha | Sort-Object { Get-Random } -Unique
+            $L = Get-Random $Ls -Minimum $passlenght
+            [array]$Pass2 = $Pass2 + $L
+            $x = $x + 1
+        }
 
 
-    $S = $null
-    if ($x -ne $ReqPassLenght){
-    $Ss = $Special | Sort-Object {Get-Random} -Unique
-    $S = Get-Random $Ss -Minimum $passlenght
-    [array]$Pass4 = $Pass4 + $S
-    $x = $x + 1
-    }
+
+        $N = $null
+        if ($x -ne $ReqPassLenght) {
+            $Ns = $Num | Sort-Object { Get-Random } -Unique
+            $N = Get-Random $Ns -Minimum $passlenght
+            [array]$Pass3 = $Pass3 + $N
+            $x = $x + 1
+        }
+
+
+        $S = $null
+        if ($x -ne $ReqPassLenght) {
+            $Ss = $Special | Sort-Object { Get-Random } -Unique
+            $S = Get-Random $Ss -Minimum $passlenght
+            [array]$Pass4 = $Pass4 + $S
+            $x = $x + 1
+        }
 
 
     }
@@ -578,12 +598,12 @@ function GeneratePwd ($length) {
 
     $PassOut = $Pass1 + $Pass2 + $Pass3 + $Pass4
 
-    [string]$Shuffle = $PassOut | Sort-Object {Get-Random} -Unique
+    [string]$Shuffle = $PassOut | Sort-Object { Get-Random } -Unique
     # Write-Host "AppuPass = $PassOut"
     $JoiningPwd = $Shuffle -split " "
 
     ForEach ($Pwd in $JoiningPwd) {
-    $OutputPassword = $OutputPassword + $Pwd
+        $OutputPassword = $OutputPassword + $Pwd
     }
 
 
@@ -592,7 +612,7 @@ function GeneratePwd ($length) {
 
 }
 
-function RandomPass (){
+function RandomPass () {
     Clear-Host
    
     loadlogo
@@ -606,30 +626,32 @@ function RandomPass (){
     Write-host " I will help you generate 10 Random password, you may select which you wish !!" -ForegroundColor Blue
     Write-Host " ================================================================================ "
     do {
-            GeneratePwd $Length
-            $i++
+        GeneratePwd $Length
+        $i++
     } until ($i -eq 11)
-            Write-Host " ================================================================================ "
-            Write-Host " "
+    Write-Host " ================================================================================ "
+    Write-Host " "
 
-            Write-Host " " -NoNewline
-            Write-Host " N " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
-            Write-Host " " -NoNewline
-            Write-Host " New Query " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
-            Write-Host " " -NoNewline
-            Write-Host " X " -NoNewline -ForegroundColor Black -BackgroundColor Green
-            Write-Host " " -NoNewline
-            Write-Host " Main Menu " -ForegroundColor Black -BackgroundColor Green  
-            Write-Host " " -BackgroundColor Black
-            $NextWhat = Read-Host " Enter Option "
+    Write-Host " " -NoNewline
+    Write-Host " N " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+    Write-Host " " -NoNewline
+    Write-Host " New Query " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+    Write-Host " " -NoNewline
+    Write-Host " X " -NoNewline -ForegroundColor Black -BackgroundColor Green
+    Write-Host " " -NoNewline
+    Write-Host " Main Menu " -ForegroundColor Black -BackgroundColor Green  
+    Write-Host " " -BackgroundColor Black
+    $NextWhat = Read-Host " Enter Option "
            
-            if($NextWhat -eq "N" -or $NextWhat -eq "n"){
-                RandomPass
-            } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
-                Loading
-            } else {
-                RandomPass
-            }
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
+        RandomPass
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+        Loading
+    }
+    else {
+        RandomPass
+    }
 }
 
 function TempFileDeletion {
@@ -644,7 +666,8 @@ function TempFileDeletion {
     $p = New-Object System.Security.Principal.WindowsPrincipal($id)
     if ($p.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
         # No Action
-    } else {
+    }
+    else {
         Write-Host (" [Warning] ") -nonewline -foregroundcolor DarkYellow
         Write-Host "You are not running this Shell as { ADMIN }. Not all Temp files will be deleted !!"
         Write-Host " "
@@ -658,7 +681,7 @@ function TempFileDeletion {
     Sleep -s 2
     Write-host "Please wait... Deleting Temp files" -ForegroundColor Yellow
     Write-Host " "
-    $ErrorActionPreference="SilentlyContinue"
+    $ErrorActionPreference = "SilentlyContinue"
     Sleep -s 2
     Write-Host "Deleting User Temp Files....     " -NoNewline
     Remove-Item -Path $env:TEMP -Recurse -Force
@@ -669,7 +692,7 @@ function TempFileDeletion {
     Remove-Item -Path $Temp -Recurse -Force
     Sleep -s 2
     Write-Host "[   OK   ]" -ForegroundColor Green
-    $ErrorActionPreference="Continue"
+    $ErrorActionPreference = "Continue"
     Write-Host " "
     Write-Host "========================="
     Write-Host "End of Script, Thank you."
@@ -688,11 +711,13 @@ function TempFileDeletion {
     Write-Host " "
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "E" -or $NextWhat -eq "e"){
+    if ($NextWhat -eq "E" -or $NextWhat -eq "e") {
         exit
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         exit
     }
 }
@@ -718,113 +743,120 @@ function PortQuery {
     " -ForegroundColor Green
     $RSM = Read-Host (" Enter the option [1,2,3,4,5]")
     if ($RSM -eq 1) {
-    $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
-    $PortNum = Read-Host (" Enter the individual Port [443]")
-    $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
-    $PortChk.ReceiveTimeout = 5000
-    $result = $PortChk.connect($IPAdd,$PortNum)
-    $portChk.Close()
-    Write-Host " "
-    if($Error -ne $Null) {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
-    Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
-    } Else {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
-    Write-Host "OPEN" -ForegroundColor Green
+        $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
+        $PortNum = Read-Host (" Enter the individual Port [443]")
+        $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
+        $PortChk.ReceiveTimeout = 5000
+        $result = $PortChk.connect($IPAdd, $PortNum)
+        $portChk.Close()
+        Write-Host " "
+        if ($Error -ne $Null) {
+            Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
+            Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
+        }
+        Else {
+            Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
+            Write-Host "OPEN" -ForegroundColor Green
+        }
+        $Error.Clear()
     }
-    $Error.Clear()
-    } Elseif ($RSM -eq 2) {
-    $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
-    $PortNumG = Read-Host (" Enter the Port Range [20-33]")
-    $PortNumS = $PortNumG.Split("-")
-    [int]$i = 0
-    [int]$a = $PortNumS[0]
-    [int]$z = $PortNumS[1]
-    Write-Host " "
-    for ($i = $a; $i -lt ($z+1); $i++)
-    {
-    $PortNum = $i
-    $Error.Clear()
-    $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
-    $PortChk.ReceiveTimeout = 5000
-    $result = $PortChk.connect($IPAdd,$PortNum)
-    $portChk.Close()
-    if($Error -ne $Null) {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
-    Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
-    } Else {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
-    Write-Host "OPEN" -ForegroundColor Green
+    Elseif ($RSM -eq 2) {
+        $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
+        $PortNumG = Read-Host (" Enter the Port Range [20-33]")
+        $PortNumS = $PortNumG.Split("-")
+        [int]$i = 0
+        [int]$a = $PortNumS[0]
+        [int]$z = $PortNumS[1]
+        Write-Host " "
+        for ($i = $a; $i -lt ($z + 1); $i++) {
+            $PortNum = $i
+            $Error.Clear()
+            $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
+            $PortChk.ReceiveTimeout = 5000
+            $result = $PortChk.connect($IPAdd, $PortNum)
+            $portChk.Close()
+            if ($Error -ne $Null) {
+                Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
+                Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
+            }
+            Else {
+                Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
+                Write-Host "OPEN" -ForegroundColor Green
+            }
+            $Error.Clear()
+        }
     }
-    $Error.Clear()
+    Elseif ($RSM -eq 3) {
+        $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
+        $PortNumG = Read-Host (" Enter the Multiple Port Number [80,443]")
+        $PortNumS = $PortNumG.Split(",")
+        Write-Host " "
+        foreach ($PortNum in $PortNumS) {
+            $Error.Clear()
+            $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
+            $PortChk.ReceiveTimeout = 5000
+            $result = $PortChk.connect($IPAdd, $PortNum)
+            $portChk.Close()
+            if ($Error -ne $Null) {
+                Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
+                Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
+            }
+            Else {
+                Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
+                Write-Host "OPEN" -ForegroundColor Green
+            }
+        }
     }
-    } Elseif ($RSM -eq 3) {
-    $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
-    $PortNumG = Read-Host (" Enter the Multiple Port Number [80,443]")
-    $PortNumS = $PortNumG.Split(",")
-    Write-Host " "
-    foreach ($PortNum in $PortNumS)
-    {
-    $Error.Clear()
-    $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
-    $PortChk.ReceiveTimeout = 5000
-    $result = $PortChk.connect($IPAdd,$PortNum)
-    $portChk.Close()
-    if($Error -ne $Null) {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
-    Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
-    } Else {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
-    Write-Host "OPEN" -ForegroundColor Green
+    Elseif ($RSM -eq 4) {
+        $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
+        $PortNum = Read-Host (" Enter the Port number ")
+        [int]$NumCheck = Read-Host (" Enter number of Port Check ")
+        Write-Host " "
+        for ($i = 1; $i -lt ($NumCheck + 1); $i++) {
+            $Error.Clear()
+            $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
+            $PortChk.ReceiveTimeout = 5000
+            $result = $PortChk.connect($IPAdd, $PortNum)
+            $portChk.Close()
+            Write-Host " $IPAdd : Port Ping number $i " -NoNewline
+            if ($Error -ne $Null) {
+                Write-Host "          [FAILED]" -ForegroundColor Black -BackgroundColor Red
+            }
+            Else {
+                Write-Host "          [OPEN]" -ForegroundColor Green -BackgroundColor Black
+            }
+            $Error.Clear()
+        }
     }
+    Elseif ($RSM -eq 5) {
+        $IPAddG = Read-Host (" Enter Multiple IP/Host Name Address [10.0.0.1,10.0.0.2]")
+        $PortNumG = Read-Host (" Enter the Multiple Port Number [80,443]")
+        Write-Host " "
+        $IPAddS = $IPAddG.Split(",")
+        $PortNumS = $PortNumG.Split(",")
+        ForEach ($IPAdd in $IPAddS) {
+            ForEach ($PortNum in $PortNumS) {
+                $Error.Clear()
+                $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
+                $PortChk.ReceiveTimeout = 5000
+                $result = $PortChk.connect($IPAdd, $PortNum)
+                $portChk.Close()
+                if ($Error -ne $Null) {
+                    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
+                    Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
+                }
+                Else {
+                    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
+                    Write-Host "OPEN" -ForegroundColor Green
+                }
+            }
+        }
     }
-    } Elseif ($RSM -eq 4) {
-    $IPAdd = Read-Host (" Enter the IP/Host Name Address ")
-    $PortNum = Read-Host (" Enter the Port number ")
-    [int]$NumCheck = Read-Host (" Enter number of Port Check ")
-    Write-Host " "
-    for ($i = 1; $i -lt ($NumCheck+1); $i++)
-    {
-    $Error.Clear()
-    $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
-    $PortChk.ReceiveTimeout = 5000
-    $result = $PortChk.connect($IPAdd,$PortNum)
-    $portChk.Close()
-    Write-Host " $IPAdd : Port Ping number $i " -NoNewline
-    if($Error -ne $Null) {
-    Write-Host "          [FAILED]" -ForegroundColor Black -BackgroundColor Red
-    } Else {
-    Write-Host "          [OPEN]" -ForegroundColor Green -BackgroundColor Black
-    }
-    $Error.Clear()
-    }
-    } Elseif ($RSM -eq 5) {
-    $IPAddG = Read-Host (" Enter Multiple IP/Host Name Address [10.0.0.1,10.0.0.2]")
-    $PortNumG = Read-Host (" Enter the Multiple Port Number [80,443]")
-    Write-Host " "
-    $IPAddS = $IPAddG.Split(",")
-    $PortNumS = $PortNumG.Split(",")
-    ForEach ($IPAdd in $IPAddS) {
-    ForEach ($PortNum in $PortNumS) {
-    $Error.Clear()
-    $PortChk = New-Object -TypeName System.Net.Sockets.TcpClient
-    $PortChk.ReceiveTimeout = 5000
-    $result = $PortChk.connect($IPAdd,$PortNum)
-    $portChk.Close()
-    if($Error -ne $Null) {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Black -BackgroundColor Red -NoNewline
-    Write-Host "CLOSED" -ForegroundColor Black -BackgroundColor Red
-    } Else {
-    Write-Host " $IPAdd : Port $PortNum is " -ForegroundColor Green -NoNewline
-    Write-Host "OPEN" -ForegroundColor Green
-    }
-    }
-    }
-    } Else {
-    Write-Host " "
-    Write-Host " "
-    Write-Warning " You have enterered wrong input value !!"
-    Write-Host " Valid numbers are - 1,2,3,4,5" -ForegroundColor Green
+    Else {
+        Write-Host " "
+        Write-Host " "
+        Write-Warning " You have enterered wrong input value !!"
+        Write-Host " Valid numbers are - 1,2,3,4,5" -ForegroundColor Green
     }
     $Error.Clear()
     $ErrorActionPreference = "Continue"
@@ -841,11 +873,13 @@ function PortQuery {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         PortQuery
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         PortQuery
     }
 
@@ -862,136 +896,140 @@ function PortQuery {
 
 function Loading {
     Clear-Host
-    $ran = Get-random 1,2,3,4
+    $ran = Get-random 1, 2, 3, 4
 
-    if($ran -eq 1) {
+    if ($ran -eq 1) {
 
-    Write-host "                ,@@@@@@@," -ForegroundColor Green
-    Write-host "        ,,,.   ,@@@@@@/@@,  .oo8888o." -ForegroundColor Green
-    Write-host "     ,&%%&%&&%,@@@@@/@@@@@@,8888\88/8o" -ForegroundColor Green
-    Write-host "    ,%&\%&&%&&%,@@@\@@@/@@@88\88888/88" -ForegroundColor Green
-    Write-host "    %&&%&%&/%&&%@@\@@/ /@@@88888\88888" -ForegroundColor Green
-    Write-host "    %&&%/ %&%%&&@@\ V /@@' ` 88\8 `/88" -ForegroundColor Green
-    Write-host "     &%\   /%&     |.|        \  |8" -ForegroundColor DarkCyan
-    Write-host "        |o|        | |         | |" -ForegroundColor DarkCyan
-    Write-host "        |.|        | |         | |" -ForegroundColor DarkCyan
-    Write-host "     \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_" -ForegroundColor Green
-    Write-Host " "
-    Write-host " Loading.... Please wait !"
-    Start-Sleep -Seconds 2
-    Clear-Host
+        Write-host "                ,@@@@@@@," -ForegroundColor Green
+        Write-host "        ,,,.   ,@@@@@@/@@,  .oo8888o." -ForegroundColor Green
+        Write-host "     ,&%%&%&&%,@@@@@/@@@@@@,8888\88/8o" -ForegroundColor Green
+        Write-host "    ,%&\%&&%&&%,@@@\@@@/@@@88\88888/88" -ForegroundColor Green
+        Write-host "    %&&%&%&/%&&%@@\@@/ /@@@88888\88888" -ForegroundColor Green
+        Write-host "    %&&%/ %&%%&&@@\ V /@@' ` 88\8 `/88" -ForegroundColor Green
+        Write-host "     &%\   /%&     |.|        \  |8" -ForegroundColor DarkCyan
+        Write-host "        |o|        | |         | |" -ForegroundColor DarkCyan
+        Write-host "        |.|        | |         | |" -ForegroundColor DarkCyan
+        Write-host "     \\/ ._\//_/__/  ,\_//__\\/.  \_//__/_" -ForegroundColor Green
+        Write-Host " "
+        Write-host " Loading.... Please wait !"
+        Start-Sleep -Seconds 2
+        Clear-Host
 
-    } elseif ($ran -eq 2) {
+    }
+    elseif ($ran -eq 2) {
 
-    Write-host "                  .88888888:." -ForegroundColor DarkGray
-    Write-host "                 88888888.88888." -ForegroundColor DarkGray
-    Write-host "               .8888888888888888." -ForegroundColor DarkGray
-    Write-host "               888888888888888888" -ForegroundColor DarkGray
-    Write-host "               88' _  88 _  '88888" -ForegroundColor DarkGray
-    Write-host "               88 88 88 88  88888"
-    Write-host "               88_88_::_88_:88888"
-    Write-host "               88:::,::,:::::8888"
-    Write-host "               88`:::::::::'`8888"
-    Write-host "              .88  `::::'    8:88."
-    Write-host "             8888            `8:888." -ForegroundColor DarkGray
-    Write-host "           .8888'             `888888." -ForegroundColor DarkGray
-    Write-host "          .8888:..  .::.  ...:'8888888:." -ForegroundColor DarkGray
-    Write-host "         .8888.'     :'     `'::`88:88888" -ForegroundColor DarkGray
-    Write-host "        .8888        '         `.888:8888." -ForegroundColor DarkGray
-    Write-host "       888:8         .           888:88888" -ForegroundColor DarkGray
-    Write-host "     .888:88        .:           888:88888:" -ForegroundColor DarkGray
-    Write-host "     8888888.       ::           88:888888" -ForegroundColor DarkGray
-    Write-host "     `.::.888.      ::          .88888888" -ForegroundColor DarkGray
-    Write-host "    .::::::.888.    ::         :::`8888'.:."
-    Write-host "   ::::::::::.888   '         .::::::::::::"
-    Write-host "   ::::::::::::.8    '      .:8::::::::::::."
-    Write-host "  .::::::::::::::.        .:888:::::::::::::"
-    Write-host "  :::::::::::::::88:.__..:88888:::::::::::'"
-    Write-host "   `'.:::::::::::88888888888.88:::::::::'"
-    Write-host "           :::_: --  - -   :_::::"
-    Write-Host " "
-    Write-host " Loading.... Please wait !"
-    Start-Sleep -Seconds 2
-    Clear-Host
+        Write-host "                  .88888888:." -ForegroundColor DarkGray
+        Write-host "                 88888888.88888." -ForegroundColor DarkGray
+        Write-host "               .8888888888888888." -ForegroundColor DarkGray
+        Write-host "               888888888888888888" -ForegroundColor DarkGray
+        Write-host "               88' _  88 _  '88888" -ForegroundColor DarkGray
+        Write-host "               88 88 88 88  88888"
+        Write-host "               88_88_::_88_:88888"
+        Write-host "               88:::,::,:::::8888"
+        Write-host "               88`:::::::::'`8888"
+        Write-host "              .88  `::::'    8:88."
+        Write-host "             8888            `8:888." -ForegroundColor DarkGray
+        Write-host "           .8888'             `888888." -ForegroundColor DarkGray
+        Write-host "          .8888:..  .::.  ...:'8888888:." -ForegroundColor DarkGray
+        Write-host "         .8888.'     :'     `'::`88:88888" -ForegroundColor DarkGray
+        Write-host "        .8888        '         `.888:8888." -ForegroundColor DarkGray
+        Write-host "       888:8         .           888:88888" -ForegroundColor DarkGray
+        Write-host "     .888:88        .:           888:88888:" -ForegroundColor DarkGray
+        Write-host "     8888888.       ::           88:888888" -ForegroundColor DarkGray
+        Write-host "     `.::.888.      ::          .88888888" -ForegroundColor DarkGray
+        Write-host "    .::::::.888.    ::         :::`8888'.:."
+        Write-host "   ::::::::::.888   '         .::::::::::::"
+        Write-host "   ::::::::::::.8    '      .:8::::::::::::."
+        Write-host "  .::::::::::::::.        .:888:::::::::::::"
+        Write-host "  :::::::::::::::88:.__..:88888:::::::::::'"
+        Write-host "   `'.:::::::::::88888888888.88:::::::::'"
+        Write-host "           :::_: --  - -   :_::::"
+        Write-Host " "
+        Write-host " Loading.... Please wait !"
+        Start-Sleep -Seconds 2
+        Clear-Host
 
-    } elseif ($ran -eq 3) {    
+    }
+    elseif ($ran -eq 3) {    
 
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " "
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-host " ################  ################ " -ForegroundColor Blue
-    Write-Host " "
-    Write-host " Loading.... Please wait !"
-    Start-Sleep -Seconds 2
-    Clear-Host
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " "
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-host " ################  ################ " -ForegroundColor Blue
+        Write-Host " "
+        Write-host " Loading.... Please wait !"
+        Start-Sleep -Seconds 2
+        Clear-Host
 
-    } elseif ($ran -eq 4) {
+    }
+    elseif ($ran -eq 4) {
 
 
-    Write-Host " "
-    Write-host "                   .__." -ForegroundColor Green
-    Write-host "                   (oo)____" -ForegroundColor Green
-    Write-host "                   (__)    )\" -ForegroundColor Green
-    Write-host "                      ll--ll '" -ForegroundColor Green
-    Write-Host " "
-    Write-host " Loading.... Please wait !"
-    Start-Sleep -Seconds 2
-    Clear-Host
+        Write-Host " "
+        Write-host "                   .__." -ForegroundColor Green
+        Write-host "                   (oo)____" -ForegroundColor Green
+        Write-host "                   (__)    )\" -ForegroundColor Green
+        Write-host "                      ll--ll '" -ForegroundColor Green
+        Write-Host " "
+        Write-host " Loading.... Please wait !"
+        Start-Sleep -Seconds 2
+        Clear-Host
     
     }
     MainMenu
 }
 
-Function GetUserIP ($GetIP){
-    $bin=[convert]::ToString($GetIP,2).PadLeft(32,'0').ToCharArray()
-    $A=[convert]::ToByte($bin[0..7] -join "",2)
-    $B=[convert]::ToByte($bin[8..15] -join "",2)
-    $C=[convert]::ToByte($bin[16..23] -join "",2)
-    $D=[convert]::ToByte($bin[24..31] -join "",2)
-    return $($A,$B,$C,$D -join ".")
+Function GetUserIP ($GetIP) {
+    $bin = [convert]::ToString($GetIP, 2).PadLeft(32, '0').ToCharArray()
+    $A = [convert]::ToByte($bin[0..7] -join "", 2)
+    $B = [convert]::ToByte($bin[8..15] -join "", 2)
+    $C = [convert]::ToByte($bin[16..23] -join "", 2)
+    $D = [convert]::ToByte($bin[24..31] -join "", 2)
+    return $($A, $B, $C, $D -join ".")
 }
 
 
-Function SearchUser ($UserQuery){
-$search = New-Object DirectoryServices.DirectorySearcher([adsi]"")
-$Search.filter = "(&(objectCategory=Person)(objectClass=user)(|(mail=$UserQuery)(employeeid=$UserQuery)(samaccountname=$UserQuery)))"
-$objUsers = $search.FindAll()
-$i = 0
-ForEach ($objUser in $objUsers) {
-$i = $i + 1
-}
+Function SearchUser ($UserQuery) {
+    $search = New-Object DirectoryServices.DirectorySearcher([adsi]"")
+    $Search.filter = "(&(objectCategory=Person)(objectClass=user)(|(mail=$UserQuery)(employeeid=$UserQuery)(samaccountname=$UserQuery)))"
+    $objUsers = $search.FindAll()
+    $i = 0
+    ForEach ($objUser in $objUsers) {
+        $i = $i + 1
+    }
 
-[int32]$ResultCount = $i
+    [int32]$ResultCount = $i
 
-if ($ResultCount -eq $null -or $ResultCount -eq 0) {
-Write-Host "      { " -ForegroundColor DarkYellow
-Write-Host "        Search resulted in NULL Output.... Possible cause !!" -ForegroundColor DarkYellow
-Write-Host "         { " -ForegroundColor DarkYellow
-Write-Host "            No connectivity to Active Directory " -ForegroundColor DarkYellow
-Write-Host "                 OR " -ForegroundColor Yellow
-Write-Host "            Unable to find AD Object " -NoNewline -ForegroundColor DarkYellow
-Write-Host "{ " -ForegroundColor Cyan -NoNewline
-Write-Host "$UserQuery" -NoNewline -ForegroundColor Yellow
-Write-Host " }" -ForegroundColor Cyan -NoNewline
-Write-Host "  " -ForegroundColor DarkYellow
-Write-Host "         } " -ForegroundColor DarkYellow
-Write-Host "      } " -ForegroundColor DarkYellow
-Pause
-NewSearch
-} Else {
-Write-Host " Got one Object { $i }" -ForegroundColor Green
-}
+    if ($ResultCount -eq $null -or $ResultCount -eq 0) {
+        Write-Host "      { " -ForegroundColor DarkYellow
+        Write-Host "        Search resulted in NULL Output.... Possible cause !!" -ForegroundColor DarkYellow
+        Write-Host "         { " -ForegroundColor DarkYellow
+        Write-Host "            No connectivity to Active Directory " -ForegroundColor DarkYellow
+        Write-Host "                 OR " -ForegroundColor Yellow
+        Write-Host "            Unable to find AD Object " -NoNewline -ForegroundColor DarkYellow
+        Write-Host "{ " -ForegroundColor Cyan -NoNewline
+        Write-Host "$UserQuery" -NoNewline -ForegroundColor Yellow
+        Write-Host " }" -ForegroundColor Cyan -NoNewline
+        Write-Host "  " -ForegroundColor DarkYellow
+        Write-Host "         } " -ForegroundColor DarkYellow
+        Write-Host "      } " -ForegroundColor DarkYellow
+        Pause
+        NewSearch
+    }
+    Else {
+        Write-Host " Got one Object { $i }" -ForegroundColor Green
+    }
 
 
     ForEach ($objUser in $objUsers) {
@@ -1021,26 +1059,26 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         $dialinIPRaw = $Query.Get('msRADIUSFramedIPAddress')
         $dialinIP = GetUserIP $dialinIPRaw
         $Dialinstatuscolor = "white"
-        if($dialinStatus -eq $null){
+        if ($dialinStatus -eq $null) {
             $dialinStatus = "Control access through NPS Network Policy"
             $Dialinstatuscolor = "Green"
         }
 
-        if($dialinStatus -eq $False){
+        if ($dialinStatus -eq $False) {
             $Dialinstatuscolor = "Red"
         }
 
-        if($dialinIP -eq $null){
+        if ($dialinIP -eq $null) {
             $dialinIP = "No IP Set"
             $dialinIPColor = "Red"
         }
 
         $LDAPSearcherVal = $query.get("distinguishedName")
         $q = [adsisearcher]""
-        $val = $q.Filter="distinguishedName=$LDAPSearcherVal"
+        $val = $q.Filter = "distinguishedName=$LDAPSearcherVal"
         $val = $q.PropertiesToLoad.Add('msDS-UserPasswordExpiryTimeComputed')
         $expirationdate = ($q.findone().properties).'msds-userpasswordexpirytimecomputed'
-        $value=[datetime]::FromFileTime([string]$expirationdate)
+        $value = [datetime]::FromFileTime([string]$expirationdate)
         $diff = New-TimeSpan -Start (get-date) -End $value
         # $diff.Days
         $GetpwdExpDays = $diff.Days
@@ -1049,32 +1087,36 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         # $GetpwdExpAdd = $getpwdlastset.AddDays(90)
         # $GetpwdExpdiff = New-TimeSpan -Start (get-date) -End $GetpwdExpAdd
         # $GetpwdExpDays = $GetpwdExpdiff.Days
-        if($GetpwdExpDays -lt 0){
+        if ($GetpwdExpDays -lt 0) {
             $GetpwdStat = "Expired $GetpwdExpDays days ago [$value]"
             $pwdcolor = "Red"
-        } Elseif ($GetpwdExpDays -gt 1) {
+        }
+        Elseif ($GetpwdExpDays -gt 1) {
             $GetpwdStat = "Expire's in $GetpwdExpDays days [$value]"
             $pwdcolor = "Green"
-        } Elseif($GetpwdExpDays -eq 1 -or $GetpwdExpDays -eq 0) {
+        }
+        Elseif ($GetpwdExpDays -eq 1 -or $GetpwdExpDays -eq 0) {
             $GetpwdStat = "Expire's in $GetpwdExpDays days [$value]"
             $pwdcolor = "Yellow"
         }
-        if($GetUAC -eq 66048 -or $GetUAC -eq 65536 -or $GetUAC -eq 66050 -or $GetUAC -eq 66080){
-        $GetpwdStat = "Never Expires"
-        $pwdcolor = "Yellow"
+        if ($GetUAC -eq 66048 -or $GetUAC -eq 65536 -or $GetUAC -eq 66050 -or $GetUAC -eq 66080) {
+            $GetpwdStat = "Never Expires"
+            $pwdcolor = "Yellow"
         }
         $GetCreation = $Query.get("WhenCreated")
         $GetSIP = $Query.get("msRTCSIP-PrimaryUserAddress")
         $GetSIPLocFinder = $Query.get("msRTCSIP-DeploymentLocator")
         if ($GetSIPLocFinder -eq "SRV:") {
-        $GetSIPLoc = "On-Prem [$GetSIPLocFinder]"
-        $Siploccolor = "Green"
-        } elseif ($GetSIPLocFinder -eq "sipfed.online.lync.com") {
-        $GetSIPLoc = "Cloud [$GetSIPLocFinder]"
-        $Siploccolor = "Yellow"
-        } else {
-        $GetSIPLoc = $GetSIPLocFinder
-        $Siploccolor = "Red"
+            $GetSIPLoc = "On-Prem [$GetSIPLocFinder]"
+            $Siploccolor = "Green"
+        }
+        elseif ($GetSIPLocFinder -eq "sipfed.online.lync.com") {
+            $GetSIPLoc = "Cloud [$GetSIPLocFinder]"
+            $Siploccolor = "Yellow"
+        }
+        else {
+            $GetSIPLoc = $GetSIPLocFinder
+            $Siploccolor = "Red"
         }
 
         $GetmgrVal = $Query.Get("Manager")
@@ -1086,22 +1128,24 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         $LckStat = ""
         $LckStat = $Query.("IsAccountLocked")
         if ($LckStat) {
-        $GetLockVal = "Locked"
-        $LockColor = "Red"
-        } Else {
-        $GetLockVal = "Not Locked"
-        $LockColor = "Green"
+            $GetLockVal = "Locked"
+            $LockColor = "Red"
+        }
+        Else {
+            $GetLockVal = "Not Locked"
+            $LockColor = "Green"
         }
        
         $GetDisabVal = ""
         $DisabStat = ""
         $DisabStat = $Query.("AccountDisabled")
         if ($DisabStat) {
-        $DisabStat = "Disabled"
-        $DisabColor = "Red"
-        } Else {
-        $DisabStat = "Active"
-        $DisabColor = "Green"
+            $DisabStat = "Disabled"
+            $DisabColor = "Red"
+        }
+        Else {
+            $DisabStat = "Active"
+            $DisabColor = "Green"
         }
        
         $GetHomeMDB = $Query.get("homeMDB")
@@ -1109,24 +1153,27 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         $GetHomeMDBName = $splithomemdb -split "="
         $GetMailboxCreation = $Query.get("msExchWhenMailboxCreated")
         $GetMailboxLocVal = $objUser.properties.item("msExchRecipientTypeDetails")
-        if($GetMailboxLocVal -eq 1){
-        $GetMailboxType = "On-Prem"
-        $Mbxtypecolor = "Green"
-        } Elseif ($GetMailboxLocVal -eq 2147483648) {
-        $GetMailboxType = "Remote Mailbox"
-        $Mbxtypecolor = "Yellow"
-        } Else {
-        $GetMailboxType = "Unknown"
-        $Mbxtypecolor = "Red"
+        if ($GetMailboxLocVal -eq 1) {
+            $GetMailboxType = "On-Prem"
+            $Mbxtypecolor = "Green"
+        }
+        Elseif ($GetMailboxLocVal -eq 2147483648) {
+            $GetMailboxType = "Remote Mailbox"
+            $Mbxtypecolor = "Yellow"
+        }
+        Else {
+            $GetMailboxType = "Unknown"
+            $Mbxtypecolor = "Red"
         }
 
         $DotForward = $objUser.properties.item("altRecipient")
-        if ($DotForward -eq $null -or $DotForward -eq "< Null >"){
-        $isDotForwardVal = " "
-        $dotForwardColor = "Green"
-        } Else {
-        $isDotForwardVal = "Yes"
-        $dotForwardColor = "Yellow"
+        if ($DotForward -eq $null -or $DotForward -eq "< Null >") {
+            $isDotForwardVal = " "
+            $dotForwardColor = "Green"
+        }
+        Else {
+            $isDotForwardVal = "Yes"
+            $dotForwardColor = "Yellow"
         }
 
         Write-Host " ================================================================"
@@ -1196,27 +1243,32 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
         Write-host " " -BackgroundColor Black
         $option = Read-Host " Enter Option "
 
-        if ($option -eq "N" -or $option -eq $null -or $option -eq ""){
+        if ($option -eq "N" -or $option -eq $null -or $option -eq "") {
        
-        NewSearch
-        } Elseif ($option -eq "U" -or $option -eq "u") {
+            NewSearch
+        }
+        Elseif ($option -eq "U" -or $option -eq "u") {
             Unlock $Query $UserQuery
-        } Elseif ($option -eq "M" -or $option -eq "m") {
+        }
+        Elseif ($option -eq "M" -or $option -eq "m") {
            
-                    $GetID = $null
-                    $objLdap = $null
-                    $Info = $null
-                    $split = $null
-                    $Info2 = $null
-                    $Query = $null
+            $GetID = $null
+            $objLdap = $null
+            $Info = $null
+            $split = $null
+            $Info2 = $null
+            $Query = $null
 
             MoreInfo $objUser
 
-        } Elseif($option -eq "E" -or $option -eq "e") {
+        }
+        Elseif ($option -eq "E" -or $option -eq "e") {
             SayThanks
-        } elseif ($option -eq "X" -or $option -eq "x") {
+        }
+        elseif ($option -eq "X" -or $option -eq "x") {
             Loading
-        } Else {
+        }
+        Else {
             NewSearch
         }
 
@@ -1226,87 +1278,89 @@ Write-Host " Got one Object { $i }" -ForegroundColor Green
 
 }
 
-Function Unlock ($Query,$UserQuery) {
- # Write-host "Running Unlock - $Query" -ForegroundColor Yellow
- $GetSAM = $query.get("saMAccountName")
- # Write-host "SAMAccountName is - $GetSAM" -ForegroundColor Green
- Write-host " .Trying to Unlock... $GetSAM" -ForegroundColor Yellow -BackgroundColor Black
- Start-Sleep -Seconds 2
- $Query.InvokeSet("IsAccountLocked",$false)
- $Query.SetInfo()
- Write-host " .Refreshing the query for User... $GetSAM" -ForegroundColor Black -BackgroundColor Yellow
- Start-Sleep -Seconds 2
- cls
- SearchUser $UserQuery
+Function Unlock ($Query, $UserQuery) {
+    # Write-host "Running Unlock - $Query" -ForegroundColor Yellow
+    $GetSAM = $query.get("saMAccountName")
+    # Write-host "SAMAccountName is - $GetSAM" -ForegroundColor Green
+    Write-host " .Trying to Unlock... $GetSAM" -ForegroundColor Yellow -BackgroundColor Black
+    Start-Sleep -Seconds 2
+    $Query.InvokeSet("IsAccountLocked", $false)
+    $Query.SetInfo()
+    Write-host " .Refreshing the query for User... $GetSAM" -ForegroundColor Black -BackgroundColor Yellow
+    Start-Sleep -Seconds 2
+    cls
+    SearchUser $UserQuery
 }
 
-Function MoreInfo ($objUser){
-Write-host " "
-Write-Host " ____________________________________________________________ " -ForegroundColor Cyan
-Write-host " "
-$Notes = $objUser.properties.item("info")
-Write-Host " { Notes } " -ForegroundColor Yellow
-Write-host " $Notes "
+Function MoreInfo ($objUser) {
+    Write-host " "
+    Write-Host " ____________________________________________________________ " -ForegroundColor Cyan
+    Write-host " "
+    $Notes = $objUser.properties.item("info")
+    Write-Host " { Notes } " -ForegroundColor Yellow
+    Write-host " $Notes "
 
-$Homemdb = $Query.get("HomeMDB")
-Write-Host " { HomeMDB } " -ForegroundColor Yellow
-Write-host " $Homemdb "
+    $Homemdb = $Query.get("HomeMDB")
+    Write-Host " { HomeMDB } " -ForegroundColor Yellow
+    Write-host " $Homemdb "
 
-$DotForward = $objUser.properties.item("altRecipient")
-if ($DotForward -eq $null -or $DotForward -eq "< Null >"){
-$DotForwardVal = " "
-} Else {
-$DotForwardVal = " $DotForward"
-}
+    $DotForward = $objUser.properties.item("altRecipient")
+    if ($DotForward -eq $null -or $DotForward -eq "< Null >") {
+        $DotForwardVal = " "
+    }
+    Else {
+        $DotForwardVal = " $DotForward"
+    }
 
-Write-Host " { Mobile }" -ForegroundColor Yellow
-Write-Host " "$objUser.Properties.item("Mobile")
+    Write-Host " { Mobile }" -ForegroundColor Yellow
+    Write-Host " "$objUser.Properties.item("Mobile")
 
-Write-Host " "
+    Write-Host " "
 
-Write-Host " { Autoforward }" -ForegroundColor Yellow
-Write-Host " $DotForwardVal "
-$ConactQuery = [ADSI]"LDAP://$DotForward"
-$EmailQ = $ConactQuery.get("mail")
+    Write-Host " { Autoforward }" -ForegroundColor Yellow
+    Write-Host " $DotForwardVal "
+    $ConactQuery = [ADSI]"LDAP://$DotForward"
+    $EmailQ = $ConactQuery.get("mail")
 
-if ($DotForward -eq $null -or $DotForward -eq "< Null >"){
-Write-Host " "
-} Else {
-Write-Host " $EmailQ "
-}
+    if ($DotForward -eq $null -or $DotForward -eq "< Null >") {
+        Write-Host " "
+    }
+    Else {
+        Write-Host " $EmailQ "
+    }
 
-Write-Host " { Department }" -ForegroundColor Yellow
-$membershiplist = $objUser.properties.item("Department")
-Write-Host " "$membershiplist
-$TotalMem = $null
-$membershiplist = $objUser.properties.item("memberOf")
-$TotalMem = $membershiplist.count
-$i=1
-$Mship = $null
-Write-Host " "
-Write-Host " { MemberOf } " -ForegroundColor Yellow
-Write-Host " Total Membership " -NoNewline
-Write-Host "{ " -ForegroundColor Green -NoNewline
-Write-Host "$TotalMem" -NoNewline
-Write-Host " }"-ForegroundColor Green
-Write-Host " "
-$GCount = 0
-forEach ($MshipCount in $membershiplist){
-    $GCount = $GCount + 1
-}
-    ForEach ($Mship in $membershiplist){
+    Write-Host " { Department }" -ForegroundColor Yellow
+    $membershiplist = $objUser.properties.item("Department")
+    Write-Host " "$membershiplist
+    $TotalMem = $null
+    $membershiplist = $objUser.properties.item("memberOf")
+    $TotalMem = $membershiplist.count
+    $i = 1
+    $Mship = $null
+    Write-Host " "
+    Write-Host " { MemberOf } " -ForegroundColor Yellow
+    Write-Host " Total Membership " -NoNewline
+    Write-Host "{ " -ForegroundColor Green -NoNewline
+    Write-Host "$TotalMem" -NoNewline
+    Write-Host " }"-ForegroundColor Green
+    Write-Host " "
+    $GCount = 0
+    forEach ($MshipCount in $membershiplist) {
+        $GCount = $GCount + 1
+    }
+    ForEach ($Mship in $membershiplist) {
        
         $MemQuery = [ADSI]"LDAP://$Mship"
         $GroupTypeVal = $MemQuery.Properties.item("GroupType")
         # Write-Host "Group Value - $GroupTypeVal"
        
         Switch ($GroupTypeVal) {
-        2 { $GroupType = '{ Global distribution group }'    }
-        4 { $GroupType = '{ Domain local distribution group }'    }
-        8 { $GroupType = '{ Universal distribution group }'    }
-        -2147483646 { $GroupType = '{ Global security group }'    }
-        -2147483644 { $GroupType = '{ Domain local security group }'    }
-        -2147483640 { $GroupType = '{ Universal security group }'    }
+            2 { $GroupType = '{ Global distribution group }' }
+            4 { $GroupType = '{ Domain local distribution group }' }
+            8 { $GroupType = '{ Universal distribution group }' }
+            -2147483646 { $GroupType = '{ Global security group }' }
+            -2147483644 { $GroupType = '{ Domain local security group }' }
+            -2147483640 { $GroupType = '{ Universal security group }' }
         }
 
         #$MemSam = $MemSam + $MemQuery.Get("samaccountname") + " `n"
@@ -1319,52 +1373,55 @@ forEach ($MshipCount in $membershiplist){
        
     }
 
-Write-Host " "
-Write-Host " ____________________________________________________________ " -ForegroundColor Cyan
-Write-Host " "
+    Write-Host " "
+    Write-Host " ____________________________________________________________ " -ForegroundColor Cyan
+    Write-Host " "
 
-Write-Host " " -NoNewline
-Write-Host " N " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
-Write-Host " " -NoNewline
-Write-Host " New Query " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
-Write-Host " " -NoNewline
-Write-Host " X " -NoNewline -ForegroundColor Black -BackgroundColor Green
-Write-Host " " -NoNewline
-Write-Host " Main Menu " -ForegroundColor Black -BackgroundColor Green  
-Write-Host " " -BackgroundColor Black
-$NextWhat = Read-Host " Enter Option "
+    Write-Host " " -NoNewline
+    Write-Host " N " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+    Write-Host " " -NoNewline
+    Write-Host " New Query " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+    Write-Host " " -NoNewline
+    Write-Host " X " -NoNewline -ForegroundColor Black -BackgroundColor Green
+    Write-Host " " -NoNewline
+    Write-Host " Main Menu " -ForegroundColor Black -BackgroundColor Green  
+    Write-Host " " -BackgroundColor Black
+    $NextWhat = Read-Host " Enter Option "
 
-if($NextWhat -eq "N" -or $NextWhat -eq "n"){
-    NewSearch
-} elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
-    Loading
-} else {
-    NewSearch
-}
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
+        NewSearch
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+        Loading
+    }
+    else {
+        NewSearch
+    }
 
 }
 
 Function NewSearch {
-Clear-Host
-loadlogo
-Write-host " "
-Write-host " [ PERFORMING USER QUERY ] " -ForegroundColor Black -BackgroundColor Cyan
-Write-host " "  
-$UserQuery = Read-Host " Enter Employee ID / Email ID / Login ID to Search {OR} ctrl+c to Exit "
-$Search = New-Object System.DirectoryServices.DirectorySearcher($ADsPath)
-if ($UserQuery -ne $null){
-Write-Host " Searching User...."
-SearchUser $UserQuery
-} else {
-Write-Host " Enter Employee ID / Email ID to Search !!"
-}
+    Clear-Host
+    loadlogo
+    Write-host " "
+    Write-host " [ PERFORMING USER QUERY ] " -ForegroundColor Black -BackgroundColor Cyan
+    Write-host " "  
+    $UserQuery = Read-Host " Enter Employee ID / Email ID / Login ID to Search {OR} ctrl+c to Exit "
+    $Search = New-Object System.DirectoryServices.DirectorySearcher($ADsPath)
+    if ($UserQuery -ne $null) {
+        Write-Host " Searching User...."
+        SearchUser $UserQuery
+    }
+    else {
+        Write-Host " Enter Employee ID / Email ID to Search !!"
+    }
 
 }
 
 Function SayThanks {
-Write-Host " Thank you for using this Script !!" -ForegroundColor Yellow
-Start-Sleep -Seconds 3
-Exit
+    Write-Host " Thank you for using this Script !!" -ForegroundColor Yellow
+    Start-Sleep -Seconds 3
+    Exit
 }
 
 # =============================================================================================================
@@ -1381,7 +1438,7 @@ function ExportMembers ($Query) {
     Write-Host " Exporting Members for : $samaccountname"
     Write-Host " ======================================= " -ForegroundColor Yellow
     $i = 0
-    foreach($member in $mem){
+    foreach ($member in $mem) {
         $i = $i + 1
     }
     # $filename = (New-Guid).Guid
@@ -1393,7 +1450,7 @@ function ExportMembers ($Query) {
     Write-host " "
     Write-Host " [ Exporting ] " -ForegroundColor DarkGreen -NoNewline
     Write-Host " Please wait !!"
-    foreach($member in $mem){
+    foreach ($member in $mem) {
         $mail = $null
         $employeeid = $null
         $LDAPInfo = "LDAP://" + $member
@@ -1426,11 +1483,13 @@ function ExportMembers ($Query) {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         NewGrpSearch
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         NewGrpSearch
     }
 }
@@ -1439,13 +1498,13 @@ function ListMembers ($Query) {
     $samaccountname = $Query.get("samaccountname")
     $mem = $Query.get("member")
     $GroupMemCount = 0
-    foreach($countmeme in $mem){
+    foreach ($countmeme in $mem) {
         $GroupMemCount = $GroupMemCount + 1
     }
     Write-Host " Listing Members for : $samaccountname"
     Write-Host " ======================================= " -ForegroundColor Yellow
     $i = 0
-    foreach($member in $mem){
+    foreach ($member in $mem) {
         $i = $i + 1
     }
    
@@ -1459,7 +1518,7 @@ function ListMembers ($Query) {
     Write-Host " =======================================" -ForegroundColor Yellow
     Write-host " "
     $i = 0
-    foreach($member in $mem){
+    foreach ($member in $mem) {
         $mail = $null
         $employeeid = $null
         $LDAPInfo = "LDAP://" + $member
@@ -1474,9 +1533,10 @@ function ListMembers ($Query) {
        
        
         Write-host " $name , $sam , " -NoNewline
-        if($objClass -eq "group"){
+        if ($objClass -eq "group") {
             Write-Host $objClass -ForegroundColor Yellow
-        } else {
+        }
+        else {
             Write-Host $objClass -ForegroundColor White
         }
         $i++
@@ -1496,11 +1556,13 @@ function ListMembers ($Query) {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         NewGrpSearch
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         NewGrpSearch
     }
    
@@ -1511,11 +1573,12 @@ function MoreGrpInfo ($Query) {
     $getinfo = $Query.get("info")
     $info = ConvertTo-Json $getinfo
     $memof = $Query.get("MemberOf")
-    if($memof -eq $null){
+    if ($memof -eq $null) {
         $mems = " "
-    } else {
+    }
+    else {
        
-        ForEach($members in $memof){
+        ForEach ($members in $memof) {
             $memsp1 = $members -split (",")
             $memsp2 = $memsp1[0] -split ("=")
             [array]$mems = $mems + $memsp2[1]
@@ -1546,11 +1609,13 @@ function MoreGrpInfo ($Query) {
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         NewGrpSearch
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         NewGrpSearch
     }
    
@@ -1699,11 +1764,11 @@ Function SearchGroup ($GroupQuery) {
 
 }
 
-function ShowLaps ($Query){
+function ShowLaps ($Query) {
     $GetLaps = $null
     $GetLaps = $Query.get("ms-Mcs-AdmPwd")
     Write-Host " Showing LAPS for the Computer"
-    if($null -eq $GetLaps){
+    if ($null -eq $GetLaps) {
         Write-Host " "
         Write-Host " { " -ForegroundColor Blue
         Write-Host "    LAPS Password " -ForegroundColor Gray -NoNewline
@@ -1711,7 +1776,8 @@ function ShowLaps ($Query){
         Write-Host " Unable to fetch the LAPS " -ForegroundColor Yellow
         Write-Host " }" -ForegroundColor Blue
         Write-Host " "
-        } else {
+    }
+    else {
         Write-Host " "
         Write-Host " { " -ForegroundColor Blue
         Write-Host "    LAPS Password " -ForegroundColor Gray -NoNewline
@@ -1733,19 +1799,21 @@ function ShowLaps ($Query){
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         NewCompSearch
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         NewCompSearch
     }
 }
 
-Function ListCompMembers ($Query){
+Function ListCompMembers ($Query) {
     $Memberof = $Query.get("Memberof")
     Write-Host "[ Member Of Details ]" -ForegroundColor Yellow
-    ForEach ($members in $Memberof){
+    ForEach ($members in $Memberof) {
         $member = $members -split (",")
         $mem = $member[0] -split "="
         $memval = $mem[1]
@@ -1764,11 +1832,13 @@ Function ListCompMembers ($Query){
     Write-Host " " -BackgroundColor Black
     $NextWhat = Read-Host " Enter Option "
    
-    if($NextWhat -eq "N" -or $NextWhat -eq "n"){
+    if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
         NewCompSearch
-    } elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+    }
+    elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
         Loading
-    } else {
+    }
+    else {
         NewCompSearch
     }
 }
@@ -1848,7 +1918,7 @@ Function SearchComp ($CompQuery) {
             16777216 { "TRUSTED_TO_AUTH_FOR_DELEGATION" }
             67108864 { "PARTIAL_SECRETS_ACCOUNT" }
             532480 { "Domain Controller" }
-            Default {"$useraccountcontrol"}
+            Default { "$useraccountcontrol" }
         }
        
     }
@@ -1871,11 +1941,12 @@ Function SearchComp ($CompQuery) {
     Write-Host " DNSHostName               : $DNSHostName"
     Write-Host " ObjectClass               : $ObjectClass"
     Write-Host " Operatingsystem           : $Operatingsystem"
-    if($uac -eq "Domain Controller"){
-    Write-Host " Useraccountcontrol        : " -nonewline
-    Write-host $uac -ForegroundColor Yellow
-    } else {
-    Write-Host " Useraccountcontrol        : $uac"
+    if ($uac -eq "Domain Controller") {
+        Write-Host " Useraccountcontrol        : " -nonewline
+        Write-host $uac -ForegroundColor Yellow
+    }
+    else {
+        Write-Host " Useraccountcontrol        : $uac"
     }
     Write-Host " Description               : $description"
     Write-Host " Created                   : $WCreated"
@@ -1972,6 +2043,126 @@ Function NewGrpSearch {
 
 }
 
+Function ObjectExport {
+    Clear-Host
+    loadlogo
+    Write-host " "
+    Write-Host " [ PERFORMING Object Export ] " -ForegroundColor Black -BackgroundColor Cyan
+    Write-host " "
+    $OUPath = Read-Host " Enter the OU path for Search [Ex - Ou=TestOU,DC=appu,DC=local] : "
+    Write-Host " ======================"
+    Write-Host " Select the Option"
+    Write-Host " ======================"
+    Write-Host " 1. Export All Users from specific OU & Sub OU"
+    Write-Host " 2. Export All Computers from specific OU & Sub OU"
+    Write-Host " 3. Export All Objects from specific OU & Sub OU"
+    $Ask = Read-Host " Prompt > "
+
+    if ($Ask -eq 1) {
+        # All Users
+        # ======================
+        Write-Host " Exporing All Users from : $OUPath" -ForegroundColor Green
+        $searcher = New-Object System.DirectoryServices.DirectorySearcher
+        $searcher.SearchRoot = [ADSI]"LDAP://$OUPath"
+        $searcher.SearchScope = "Subtree"
+        $searcher.Filter = "(&(objectCategory=person)(objectClass=user))"
+        $searcher.PropertiesToLoad.Add("name")
+        $searcher.PropertiesToLoad.Add("userprincipalname")
+        $searcher.PropertiesToLoad.Add("samaccountname")
+        $searcher.PropertiesToLoad.Add("distinguishedname")
+        $searcher.PropertiesToLoad.Add("whencreated")
+
+        $results = $searcher.FindAll()
+        forEach ($result in $results) {
+            $properties = $result.Properties
+
+            $login = $login + @([pscustomobject]@{name = $($properties.name); samaccountname = $($properties.samaccountname); userprincipalname = $($properties.userprincipalname); whencreated = $($properties.whencreated) })
+        }
+        $guid = (New-Guid).Guid
+        $login | Export-Csv -Path .\AllUsers_$guid.csv -NoTypeInformation
+        Write-Host " Exported to : " -NoNewline
+        Write-Host ".\AllUsers_$guid.csv" -ForegroundColor Yellow
+    }
+    elseif ($Ask -eq 2) {
+
+        # All Computers
+        # ======================
+        Write-Host " Exporing All Computers from : $OUPath" -ForegroundColor Green
+        $searcher = New-Object System.DirectoryServices.DirectorySearcher
+        $searcher.SearchRoot = [ADSI]"LDAP://$OUPath"
+        $searcher.SearchScope = "Subtree"
+        $searcher.Filter = "(&(objectClass=computer))"
+        $searcher.PropertiesToLoad.Add("name")
+        $searcher.PropertiesToLoad.Add("whencreated")
+        $searcher.PropertiesToLoad.Add("samaccountname")
+        $searcher.PropertiesToLoad.Add("distinguishedname")
+        $searcher.PropertiesToLoad.Add("operatingsystemversion")
+
+        $results = $searcher.FindAll()
+        forEach ($result in $results) {
+            $properties = $result.Properties
+            $login = $login + @([pscustomobject]@{name = $($properties.name); samaccountname = $($properties.samaccountname); distinguishedname = $($properties.distinguishedname); operatingsystemversion = $($properties.operatingsystemversion); whencreated = $($properties.whencreated) })
+        }
+        $guid = (New-Guid).Guid
+        $login | Export-Csv -Path .\AllComputers_$guid.csv -NoTypeInformation
+        Write-Host " Exported to : " -NoNewline
+        Write-Host ".\AllComputers_$guid.csv" -ForegroundColor Yellow
+    }
+    elseif ($Ask -eq 3) {
+
+        # All Objects
+        # ======================
+        Write-Host " Exporing All Objects from : $OUPath" -ForegroundColor Green
+        $searcher = New-Object System.DirectoryServices.DirectorySearcher
+        $searcher.SearchRoot = [ADSI]"LDAP://$OUPath"
+        $searcher.Filter = "(objectClass=*)"
+        $searcher.SearchScope = "Subtree"
+        $searcher.PropertiesToLoad.Add("name")
+        $searcher.PropertiesToLoad.Add("WhenCreated")
+        $searcher.PropertiesToLoad.Add("samaccountname")
+        $searcher.PropertiesToLoad.Add("distinguishedname")
+        $searcher.PropertiesToLoad.Add("objectclass")
+
+        $results = $searcher.FindAll()
+        forEach ($result in $results) {
+            $properties = $result.Properties
+          
+            $login = $login + @([pscustomobject]@{name = $($properties.name); samaccountname = $($properties.samaccountname); distinguishedname = $($properties.distinguishedname); objectclass = $($properties.objectclass); whencreated = $($properties.whencreated) })
+        }
+        $guid = (New-Guid).Guid
+        $login | Export-Csv -Path .\AllObjects_$guid.csv -NoTypeInformation
+        Write-Host " Exported to : " -NoNewline
+        Write-Host ".\AllObjects_$guid.csv" -ForegroundColor Yellow
+    }
+    else {
+        Write-Host " Invalid Option Selected !!" -ForegroundColor Red
+    }
+
+    $option = $null
+    Write-Host " "
+    Write-Host " ================================================================"
+    Write-Host " "
+    Write-Host " N " -ForegroundColor Black -BackgroundColor White -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " New Query " -ForegroundColor Black -BackgroundColor White -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " X " -ForegroundColor White -BackgroundColor DarkMagenta -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " Main Menu " -ForegroundColor White -BackgroundColor DarkMagenta
+    $option = Read-Host " > "
+
+    if ($option -eq "n" -or $option -eq "N") {
+        ObjectExport
+    }
+    elseif ($option -eq "x" -or $option -eq "X") {
+        Loading
+    }
+    else {
+        ObjectExport
+    }
+
+}
+
 function xxd {
     Clear-Host
     loadlogo
@@ -1984,7 +2175,7 @@ function xxd {
     $bytes = [System.IO.File]::ReadAllBytes($FilePath)
     $lineSize = 16
     
-# Display the header
+    # Display the header
     Write-Host ("Offset(Hex)  " + ("Byte Values".PadRight(47)) + " |ASCII|")
 
     # Iterate through bytes
@@ -1993,12 +2184,13 @@ function xxd {
         $offset = $i.ToString("X8")
         $hex = ($chunk | ForEach-Object { $_.ToString("X2") }) -join " "
         $ascii = ($chunk | ForEach-Object {
-            if ($_ -ge 32 -and $_ -le 126) {
-                [char]$_
-            } else {
-                "."
-            }
-        }) -join ""
+                if ($_ -ge 32 -and $_ -le 126) {
+                    [char]$_
+                }
+                else {
+                    "."
+                }
+            }) -join ""
 
         Write-Host ("$offset  $hex".PadRight(57) + " |$ascii|")
     }
@@ -2034,9 +2226,10 @@ function MainMenu {
     $currentDomain = $null
     $currentDomain = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
     $CurrDomName = $currentDomain.Name
-    if ($currentDomain -ne $null){
+    if ($currentDomain -ne $null) {
         $domMsg = " You have connected to Domain - $CurrDomName"
-    } else {
+    }
+    else {
         $domMsg = " Unable to connect to any Domain. Active Directory related query cannot be performed !"
     }
     Write-Host " "
@@ -2070,33 +2263,50 @@ function MainMenu {
     Write-Host "Get file HASH/s" -ForegroundColor White
     Write-Host "      12. " -ForegroundColor Green -NoNewline
     Write-Host "Get file XXD" -ForegroundColor White
+    Write-Host "      13. " -ForegroundColor Green -NoNewline
+    Write-Host "Object Export" -ForegroundColor White
     Write-Host " "
     $Option = Read-Host(" Prompt > ")
-    If($Option -eq 1){
+    If ($Option -eq 1) {
         NewSearch
-    } elseif ($option -eq 2) {
+    }
+    elseif ($option -eq 2) {
         NewGrpSearch
-    } elseif($option -eq 3) {
+    }
+    elseif ($option -eq 3) {
         NewCompSearch
-    } elseif($option -eq 4){
+    }
+    elseif ($option -eq 4) {
         PortQuery
-    } elseif($option -eq 5){
+    }
+    elseif ($option -eq 5) {
         TempFileDeletion
-    } elseif($option -eq 6){
+    }
+    elseif ($option -eq 6) {
         RandomPass
-    } elseif($option -eq 7){
+    }
+    elseif ($option -eq 7) {
         ssl-clean
-    } elseif($option -eq 8){
+    }
+    elseif ($option -eq 8) {
         sslscan-clean
-    } elseif($option -eq 9){
+    }
+    elseif ($option -eq 9) {
         converttoandfrombase64
-    } elseif($option -eq 10){
+    }
+    elseif ($option -eq 10) {
         EncryptDecryptString
-    } elseif($option -eq 11){
+    }
+    elseif ($option -eq 11) {
         GetHASHofFile
-    } elseif($option -eq 12){
+    }
+    elseif ($option -eq 12) {
         xxd
-    } else {
+    }
+    elseif ($option -eq 13) {
+        ObjectExport
+    }
+    else {
         Write-host "[Error] " -ForegroundColor Red -NoNewline
         Write-Host " You have entered invalid option !! Exiting..."
         Start-Sleep -Seconds 2
