@@ -1662,6 +1662,7 @@ Function SearchGroup ($GroupQuery) {
         $WCreated = ""
         $WChanged = ""
         $Description = ""
+        $mail = ""
         $objLdap = $objGroup.GetDirectoryEntry()
         $Info = $objLdap.Path
         $split = $Info.Split(":")
