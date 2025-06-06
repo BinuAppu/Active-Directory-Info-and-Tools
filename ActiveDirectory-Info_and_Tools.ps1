@@ -1166,13 +1166,17 @@ Function SearchUser ($UserQuery) {
             $Mbxtypecolor = "Red"
         }
 
+        $DotForward = $null
         $DotForward = $objUser.properties.item("altRecipient")
+        $ConactQuery = [ADSI]"LDAP://$DotForward"
+        $EmailQ = $ConactQuery.get("mail")
         if ($DotForward -eq $null -or $DotForward -eq "< Null >") {
             $isDotForwardVal = " "
             $dotForwardColor = "Green"
         }
         Else {
-            $isDotForwardVal = "Yes"
+            #Write-Host " $EmailQ "
+            $isDotForwardVal = "$EmailQ"
             $dotForwardColor = "Yellow"
         }
 
