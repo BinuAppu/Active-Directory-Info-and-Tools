@@ -24,9 +24,10 @@
         1.2 Full Version released Added SSL/TLS Scan.
         1.3 * BETA * LAPS, User Password Expiration date, added Base64 Encoding/Decoding, Encryption and Decryption.
         1.4 Introduced HASH functionality
+        1.5 DNS query added
 #>
 
-$version = "1.4"
+$version = "1.5"
 
 # Progress Bar color
 $host.privatedata.ProgressForegroundColor = "darkgreen";
@@ -1746,7 +1747,7 @@ Function SearchGroup ($GroupQuery) {
     Write-Host " " -NoNewline
     Write-Host " List Members " -ForegroundColor White -BackgroundColor DarkBlue
     Write-host " " -BackgroundColor Black
-    $option = Read-Host " > "
+    $option = Read-Host " Prompt > "
 
     if ($option -eq "n" -or $option -eq "N") {
         NewGrpSearch
@@ -1881,7 +1882,11 @@ Function SearchComp ($CompQuery) {
 
 
     ForEach ($objComp in $objComps) {
-        $GetID = ""
+        $GetID = $null
+        $GetDisplayName = $null
+        $description = $null
+        $WCreated = $null
+        $WChanged = $null
         $objLdap = $objComp.GetDirectoryEntry()
         $Info = $objLdap.Path
         $split = $Info.Split(":")
@@ -1979,7 +1984,7 @@ Function SearchComp ($CompQuery) {
     Write-Host " X " -ForegroundColor White -BackgroundColor DarkMagenta -NoNewline
     Write-Host " " -NoNewline
     Write-Host " Main Menu " -ForegroundColor White -BackgroundColor DarkMagenta
-    $option = Read-Host " > "
+    $option = Read-Host " Prompt > "
 
     if ($option -eq "n" -or $option -eq "N") {
         NewCompSearch
@@ -2154,7 +2159,7 @@ Function ObjectExport {
     Write-Host " X " -ForegroundColor White -BackgroundColor DarkMagenta -NoNewline
     Write-Host " " -NoNewline
     Write-Host " Main Menu " -ForegroundColor White -BackgroundColor DarkMagenta
-    $option = Read-Host " > "
+    $option = Read-Host " Prompt > "
 
     if ($option -eq "n" -or $option -eq "N") {
         ObjectExport
@@ -2212,7 +2217,7 @@ function xxd {
     Write-Host " X " -ForegroundColor White -BackgroundColor DarkMagenta -NoNewline
     Write-Host " " -NoNewline
     Write-Host " Main Menu " -ForegroundColor White -BackgroundColor DarkMagenta
-    $option = Read-Host " > "
+    $option = Read-Host " Prompt > "
 
     if ($option -eq "n" -or $option -eq "N") {
         xxd
@@ -2224,6 +2229,97 @@ function xxd {
         xxd
     }
 
+}
+
+function DNSQuery {
+    Clear-Host
+    loadlogo
+    Write-host " "
+    Write-Host " [ PERFORMING DNS QUERY ] " -ForegroundColor Black -BackgroundColor Cyan
+    Write-host " "
+    Write-Host " =================================================="
+    Write-Host " Select the Option [Default is 1 if invalid input]"
+    Write-Host " =================================================="
+    Write-Host " 1. Fetch default DNS query for External Domain [Google.com] "
+    Write-Host " 2. Fetch DNS query for internal DNS server "
+    Write-Host " "
+    Write-Host " =================================================="
+    Write-Host " "
+    $DNSQuery = Read-Host " Enter the option "
+    if($DNSQuery -eq 2){
+        $dnsval = $null
+        $customDNS = $null
+        $RecordType = $null
+        $dnsval = Read-Host " Enter DNS Value to Query "
+        $customDNS = Read-Host " Enter custom DNS [8.8.8.8], else leave blank "
+        $RecordType = Read-Host " Enter DNS Type [{UNKNOWN | A_AAAA | A | NS | MD | MF | CNAME | SOA | MB | MG | MR | NULL | WKS | PTR | HINFO | MINFO | MX | TXT | RP | AFSDB | X25 | ISDN | RT | AAAA | SRV | DNAME | OPT | DS | RRSIG | NSEC | DNSKEY | DHCID | NSEC3 | NSEC3PARAM | ANY | ALL | WINS}] "
+        Write-Host " "
+        if($null -eq $customDNS -or $null -eq $dnsval -or $null -eq $RecordType){
+            Write-Host " You have not entered all necessary fields !" -ForegroundColor Yellow
+            Start-Sleep -Seconds 3
+            DNSQuery
+        } else {
+            Resolve-DnsName -Name $dnsval -Type $RecordType -Server $customDNS
+        }
+    } else {
+        $dnsval = $null
+        $dnsval = Read-Host " Enter Domain Value to Query [Google.com] "
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " Host A Record " -ForegroundColor Green
+        Resolve-DnsName -Name $dnsval -Type A
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " Host AAAA Record " -ForegroundColor Green
+        Resolve-DnsName -Name $dnsval -Type AAAA
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " DMARC - Domain-based Message Authentication, Reporting, and Conformance Record " -ForegroundColor Green        
+        Resolve-DnsName -Name _dmarc.$dnsval -Type TXT 
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " BIMI - Brand Indicators for Message Identification Record " -ForegroundColor Green        
+        Resolve-DnsName -Name default._bimi.$dnsval -Type TXT
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " SPF - Sender Policy Framework Record " -ForegroundColor Green        
+        Resolve-DnsName -Name $dnsval -Type TXT | ?{$_.strings -like "*spf*"}
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " MX - Mail Exchange Record " -ForegroundColor Green
+        Resolve-DnsName -Name $dnsval -Type MX
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " TXT - TEXT Record " -ForegroundColor Green        
+        Resolve-DnsName -Name $dnsval -Type txt |?{$_.strings -notlike "*spf*"}
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " SRV - Server Record " -ForegroundColor Green        
+        Resolve-DnsName -Name $dnsval -Type SRV
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " NS - Name Server Record " -ForegroundColor Green        
+        Resolve-DnsName -Name $dnsval -Type NS
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " RRSIG - Resource Record Signature Record " -ForegroundColor Green        
+        Resolve-DnsName -Name $dnsval -Type RRSIG
+        Write-Host " ====================================== " -foregroundcolor Yellow
+        Write-Host " DNSKEY - Domain Name System KEY Record " -ForegroundColor Green        
+        Resolve-DnsName -Name $dnsval -Type DNSKEY
+    }
+    $option = $null
+    Write-Host " "
+    Write-Host " ================================================================"
+    Write-Host " "
+    Write-Host " N " -ForegroundColor Black -BackgroundColor White -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " New Query " -ForegroundColor Black -BackgroundColor White -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " X " -ForegroundColor White -BackgroundColor DarkMagenta -NoNewline
+    Write-Host " " -NoNewline
+    Write-Host " Main Menu " -ForegroundColor White -BackgroundColor DarkMagenta
+    $option = Read-Host " Prompt > "
+
+    if ($option -eq "n" -or $option -eq "N") {
+        DNSQuery
+    }
+    elseif ($option -eq "x" -or $option -eq "X") {
+        Loading
+    }
+    else {
+        DNSQuery
+    }
 }
 
 function MainMenu {
@@ -2270,6 +2366,8 @@ function MainMenu {
     Write-Host "Get file XXD" -ForegroundColor White
     Write-Host "      13. " -ForegroundColor Green -NoNewline
     Write-Host "Object Export" -ForegroundColor White
+    Write-Host "      14. " -ForegroundColor Green -NoNewline
+    Write-Host "DNS Query" -ForegroundColor White
     Write-Host " "
     $Option = Read-Host(" Prompt > ")
     If ($Option -eq 1) {
@@ -2310,6 +2408,9 @@ function MainMenu {
     }
     elseif ($option -eq 13) {
         ObjectExport
+    }
+    elseif ($option -eq 14) {
+        DNSQuery
     }
     else {
         Write-host "[Error] " -ForegroundColor Red -NoNewline
