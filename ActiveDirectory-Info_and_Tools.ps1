@@ -2312,10 +2312,7 @@ function DNSQuery {
         $customDNS = $null
         $RecordType = $null
         $dnsval = Read-Host " Enter DNS Value to Query "
-        $customDNS = Read-Host " Enter custom DNS [8.8.8.8], else leave blank "
-        if ($customDNS -eq $null) {
-            $customDNS = "8.8.8.8"
-        }
+        $customDNS = Read-Host " Enter custom DNS [8.8.8.8] "
         $RecordType = Read-Host " Enter DNS Type [{UNKNOWN | A_AAAA | A | NS | MD | MF | CNAME | SOA | MB | MG | MR | NULL | WKS | PTR | HINFO | MINFO | MX | TXT | RP | AFSDB | X25 | ISDN | RT | AAAA | SRV | DNAME | OPT | DS | RRSIG | NSEC | DNSKEY | DHCID | NSEC3 | NSEC3PARAM | ANY | ALL | WINS}] "
         Write-Host " "
         if ($null -eq $customDNS -or $null -eq $dnsval -or $null -eq $RecordType) {
