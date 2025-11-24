@@ -1025,8 +1025,28 @@ Function SearchUser ($UserQuery) {
         Write-Host "  " -ForegroundColor DarkYellow
         Write-Host "         } " -ForegroundColor DarkYellow
         Write-Host "      } " -ForegroundColor DarkYellow
-        Pause
-        NewSearch
+        Write-Host " "
+
+        Write-Host " " -NoNewline
+        Write-Host " N " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+        Write-Host " " -NoNewline
+        Write-Host " New Query " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+        Write-Host " " -NoNewline
+        Write-Host " X " -NoNewline -ForegroundColor Black -BackgroundColor Green
+        Write-Host " " -NoNewline
+        Write-Host " Main Menu " -ForegroundColor Black -BackgroundColor Green  
+        Write-Host " " -BackgroundColor Black
+        $NextWhat = Read-Host " Enter Option "
+    
+        if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
+            NewSearch
+        }
+        elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+            Loading
+        }
+        else {
+            NewSearch
+        }
     }
     Else {
         Write-Host " Got one Object { $i }" -ForegroundColor Green
@@ -1650,8 +1670,29 @@ Function SearchGroup ($GroupQuery) {
         Write-Host "  " -ForegroundColor DarkYellow
         Write-Host "         } " -ForegroundColor DarkYellow
         Write-Host "      } " -ForegroundColor DarkYellow
-        Pause
-        NewGrpSearch
+        Write-Host " "
+
+        Write-Host " " -NoNewline
+        Write-Host " N " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+        Write-Host " " -NoNewline
+        Write-Host " New Query " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+        Write-Host " " -NoNewline
+        Write-Host " X " -NoNewline -ForegroundColor Black -BackgroundColor Green
+        Write-Host " " -NoNewline
+        Write-Host " Main Menu " -ForegroundColor Black -BackgroundColor Green  
+        Write-Host " " -BackgroundColor Black
+        $NextWhat = Read-Host " Enter Option "
+    
+        if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
+            NewGrpSearch
+        }
+        elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+            Loading
+        }
+        else {
+            NewGrpSearch
+        }
+        
     }
     Else {
         Write-Host " Got one Object { $i }" -ForegroundColor Green
@@ -1873,8 +1914,28 @@ Function SearchComp ($CompQuery) {
         Write-Host "  " -ForegroundColor DarkYellow
         Write-Host "         } " -ForegroundColor DarkYellow
         Write-Host "      } " -ForegroundColor DarkYellow
-        Pause
-        NewCompSearch
+        
+        Write-Host " " -NoNewline
+        Write-Host " N " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+        Write-Host " " -NoNewline
+        Write-Host " New Query " -NoNewline -ForegroundColor Black -BackgroundColor Yellow
+        Write-Host " " -NoNewline
+        Write-Host " X " -NoNewline -ForegroundColor Black -BackgroundColor Green
+        Write-Host " " -NoNewline
+        Write-Host " Main Menu " -ForegroundColor Black -BackgroundColor Green  
+        Write-Host " " -BackgroundColor Black
+        $NextWhat = Read-Host " Enter Option "
+    
+        if ($NextWhat -eq "N" -or $NextWhat -eq "n") {
+            NewCompSearch
+        }
+        elseif ($NextWhat -eq "X" -or $NextWhat -eq "x") {
+            Loading
+        }
+        else {
+            NewCompSearch
+        }
+        
     }
     Else {
         Write-Host " Got one Object { $i }" -ForegroundColor Green
@@ -2246,22 +2307,27 @@ function DNSQuery {
     Write-Host " =================================================="
     Write-Host " "
     $DNSQuery = Read-Host " Enter the option "
-    if($DNSQuery -eq 2){
+    if ($DNSQuery -eq 2) {
         $dnsval = $null
         $customDNS = $null
         $RecordType = $null
         $dnsval = Read-Host " Enter DNS Value to Query "
         $customDNS = Read-Host " Enter custom DNS [8.8.8.8], else leave blank "
+        if ($customDNS -eq $null) {
+            $customDNS = "8.8.8.8"
+        }
         $RecordType = Read-Host " Enter DNS Type [{UNKNOWN | A_AAAA | A | NS | MD | MF | CNAME | SOA | MB | MG | MR | NULL | WKS | PTR | HINFO | MINFO | MX | TXT | RP | AFSDB | X25 | ISDN | RT | AAAA | SRV | DNAME | OPT | DS | RRSIG | NSEC | DNSKEY | DHCID | NSEC3 | NSEC3PARAM | ANY | ALL | WINS}] "
         Write-Host " "
-        if($null -eq $customDNS -or $null -eq $dnsval -or $null -eq $RecordType){
+        if ($null -eq $customDNS -or $null -eq $dnsval -or $null -eq $RecordType) {
             Write-Host " You have not entered all necessary fields !" -ForegroundColor Yellow
             Start-Sleep -Seconds 3
             DNSQuery
-        } else {
+        }
+        else {
             Resolve-DnsName -Name $dnsval -Type $RecordType -Server $customDNS
         }
-    } else {
+    }
+    else {
         $dnsval = $null
         $dnsval = Read-Host " Enter Domain Value to Query [Google.com] "
         Write-Host " ====================================== " -foregroundcolor Yellow
@@ -2278,13 +2344,13 @@ function DNSQuery {
         Resolve-DnsName -Name default._bimi.$dnsval -Type TXT
         Write-Host " ====================================== " -foregroundcolor Yellow
         Write-Host " SPF - Sender Policy Framework Record " -ForegroundColor Green        
-        Resolve-DnsName -Name $dnsval -Type TXT | ?{$_.strings -like "*spf*"}
+        Resolve-DnsName -Name $dnsval -Type TXT | ? { $_.strings -like "*spf*" }
         Write-Host " ====================================== " -foregroundcolor Yellow
         Write-Host " MX - Mail Exchange Record " -ForegroundColor Green
         Resolve-DnsName -Name $dnsval -Type MX
         Write-Host " ====================================== " -foregroundcolor Yellow
         Write-Host " TXT - TEXT Record " -ForegroundColor Green        
-        Resolve-DnsName -Name $dnsval -Type txt |?{$_.strings -notlike "*spf*"}
+        Resolve-DnsName -Name $dnsval -Type txt | ? { $_.strings -notlike "*spf*" }
         Write-Host " ====================================== " -foregroundcolor Yellow
         Write-Host " SRV - Server Record " -ForegroundColor Green        
         Resolve-DnsName -Name $dnsval -Type SRV
