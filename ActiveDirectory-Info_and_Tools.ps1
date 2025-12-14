@@ -17,6 +17,7 @@
     Version - 1.2 - 9/12/2023
     Version - 1.3 - 9/29/2023
     Version - 1.4 - 12/30/2024
+    Version - 1.5 - 12/14/2025
     Notes:
         1.0 Combined AD Info and
         1.1 Added Temp file removal and Random Password Generator
@@ -24,7 +25,7 @@
         1.2 Full Version released Added SSL/TLS Scan.
         1.3 * BETA * LAPS, User Password Expiration date, added Base64 Encoding/Decoding, Encryption and Decryption.
         1.4 Introduced HASH functionality
-        1.5 DNS query added
+        1.5 DNS query added and added updated
 #>
 
 $version = "1.5"
@@ -2303,6 +2304,7 @@ function DNSQuery {
     Write-Host " =================================================="
     Write-Host " 1. Fetch default DNS query for External Domain [Google.com] "
     Write-Host " 2. Fetch DNS query for internal DNS server "
+    Write-Host " 3. Multiple DNS Query using input file and export"
     Write-Host " "
     Write-Host " =================================================="
     Write-Host " "
@@ -2319,10 +2321,39 @@ function DNSQuery {
             Write-Host " You have not entered all necessary fields !" -ForegroundColor Yellow
             Start-Sleep -Seconds 3
             DNSQuery
-        }
-        else {
+        } else {
             Resolve-DnsName -Name $dnsval -Type $RecordType -Server $customDNS
         }
+    }
+    elseif($DNSQuery -eq 3){
+        $DNSQuery = $null
+        $txtfile = $null
+        $txtfile = Read-Host " Enter the FQDN for Text file [ex: C:\data\input.txt] "
+        $GetCont = Get-Content $txtfile
+        foreach($line in $GetCont){
+            $IPAddress = $line
+            # IPv4 regex pattern
+            Write-Host " Performing Query on : $line" -ForegroundColor DarkGray
+            $ipv4Regex = '^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.){3}' +
+                        '(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])$'
+
+            if ($IPAddress -match $ipv4Regex) {
+                $DNSQuery = Resolve-DnsName -Name $line
+                $ValType = $DNSQuery.Type
+                $ValNameHost = $DNSQuery.NameHost
+                Write-Host " $line | $ValType | $ValNameHost"
+                " $line | $ValType | $ValNameHost" | Out-File -FilePath "DNS_Report.txt" -Append
+            } else {
+                $DNSQuery = Resolve-DnsName -Name $line |?{$_.Type -eq "A"} | Select-Object -First 1
+                $ValType = $DNSQuery.Type
+                $ValNameHost = $DNSQuery.IPAddress
+                Write-Host " $line | $ValType | $ValNameHost"
+                " $line | $ValType | $ValNameHost"  | Out-File -FilePath "DNS_Report.txt" -Append
+            }
+        }
+        Write-Host " Report is stored at following path - " -NoNewline -ForegroundColor Yellow
+        $loc = Get-Location
+        Write-Host $loc"\DNS_Report.txt"
     }
     else {
         $dnsval = $null
